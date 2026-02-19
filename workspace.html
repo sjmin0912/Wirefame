@@ -1,0 +1,403 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>워크스페이스 - akeo</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <div class="workspace-container">
+        <!-- 상단 바 -->
+        <header class="workspace-header">
+            <div class="header-left">
+                <button class="btn-icon" onclick="location.href='index.html'" title="홈으로">
+                    ← 
+                </button>
+                <div class="project-info">
+                    <h2>장애물 피하기 게임</h2>
+                    <span class="status-badge">작업중</span>
+                </div>
+            </div>
+            <div class="header-right">
+                <div class="progress-info">
+                    <span class="progress-item">통과 <strong id="testPassCount">0</strong>/3</span>
+                    <span class="progress-item saved">저장됨</span>
+                    <span class="progress-item">오류 없음</span>
+                </div>
+                <button class="btn-primary" id="submitBtn" disabled onclick="submitProject()">
+                    📤 제출하기
+                </button>
+            </div>
+        </header>
+
+        <!-- 메인 워크스페이스 -->
+        <div class="workspace-main">
+            <!-- 좌측: 플레이 영역 (30%) -->
+            <div class="workspace-left">
+                <div class="play-section">
+                    <div class="play-header">
+                        <h3>🎮 플레이 화면</h3>
+                        <div class="play-controls">
+                            <button class="btn-small" onclick="runGame()">▶ 실행</button>
+                            <button class="btn-small" onclick="resetGame()">↺ 리셋</button>
+                            <button class="btn-small" onclick="openFullscreen()">⛶ 전체화면</button>
+                        </div>
+                    </div>
+                    <div class="play-canvas" id="gameCanvas">
+                        <!-- 실제 게임이 렌더링될 영역 -->
+                        <div class="game-stage">
+                            <!-- 게임 요소들 -->
+                            <div class="game-player" id="gamePlayer">
+                                <div class="player-character">🚗</div>
+                            </div>
+                            <div class="game-obstacles" id="gameObstacles">
+                                <!-- 장애물들이 동적으로 추가됨 -->
+                            </div>
+                            <div class="game-overlay">
+                                <div class="game-message">
+                                    <div class="message-icon">🎮</div>
+                                    <p>▶ 실행 버튼을 눌러보세요</p>
+                                    <small>화살표 키로 조작</small>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="play-info">
+                        <div class="info-row">
+                            <span>점수: <strong id="score">0</strong></span>
+                            <span>상태: <strong id="gameStatus">대기중</strong></span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- 우측: 탭 패널 (70%) -->
+            <div class="workspace-right">
+                <div class="tab-panel">
+                    <!-- 탭 헤더 -->
+                    <div class="tab-header">
+                        <button class="tab-btn active" data-tab="test" onclick="switchTab('test')">
+                            ✅ 테스트
+                        </button>
+                        <button class="tab-btn" data-tab="tutor" onclick="switchTab('tutor')">
+                            💬 튜터
+                        </button>
+                        <button class="tab-btn" data-tab="help" onclick="switchTab('help')">
+                            📚 도움말
+                        </button>
+                    </div>
+
+                    <!-- 탭 콘텐츠 -->
+                    <div class="tab-content">
+                        <!-- 테스트 탭 -->
+                        <div class="tab-pane active" id="test-pane">
+                            <div class="test-section">
+                                <div class="section-header">
+                                    <h3>테스트 체크리스트</h3>
+                                    <button class="btn-secondary" onclick="runAllTests()">🔄 전체 재테스트</button>
+                                </div>
+
+                                <!-- 테스트 카드 1 -->
+                                <div class="test-card" data-test="1">
+                                    <div class="test-card-header">
+                                        <div class="test-number">테스트 1</div>
+                                        <div class="test-status" id="test1Status">⏳ 대기중</div>
+                                    </div>
+                                    <div class="test-content">
+                                        <div class="test-item">
+                                            <label>상황/입력:</label>
+                                            <p>왼쪽 화살표 키를 눌렀을 때</p>
+                                        </div>
+                                        <div class="test-item">
+                                            <label>기대 결과:</label>
+                                            <p>캐릭터가 왼쪽으로 이동한다</p>
+                                        </div>
+                                    </div>
+                                    <div class="test-actions">
+                                        <button class="btn-small" onclick="runSingleTest(1)">▶ 실행</button>
+                                        <button class="btn-small success" onclick="markTestPass(1)">✓ 통과</button>
+                                        <button class="btn-small fail" onclick="markTestFail(1)">✗ 실패</button>
+                                    </div>
+                                </div>
+
+                                <!-- 테스트 카드 2 -->
+                                <div class="test-card" data-test="2">
+                                    <div class="test-card-header">
+                                        <div class="test-number">테스트 2</div>
+                                        <div class="test-status" id="test2Status">⏳ 대기중</div>
+                                    </div>
+                                    <div class="test-content">
+                                        <div class="test-item">
+                                            <label>상황/입력:</label>
+                                            <p>게임 시작 후 3초 대기</p>
+                                        </div>
+                                        <div class="test-item">
+                                            <label>기대 결과:</label>
+                                            <p>장애물이 위에서 떨어진다</p>
+                                        </div>
+                                    </div>
+                                    <div class="test-actions">
+                                        <button class="btn-small" onclick="runSingleTest(2)">▶ 실행</button>
+                                        <button class="btn-small success" onclick="markTestPass(2)">✓ 통과</button>
+                                        <button class="btn-small fail" onclick="markTestFail(2)">✗ 실패</button>
+                                    </div>
+                                </div>
+
+                                <!-- 테스트 카드 3 -->
+                                <div class="test-card" data-test="3">
+                                    <div class="test-card-header">
+                                        <div class="test-number">테스트 3</div>
+                                        <div class="test-status" id="test3Status">⏳ 대기중</div>
+                                    </div>
+                                    <div class="test-content">
+                                        <div class="test-item">
+                                            <label>상황/입력:</label>
+                                            <p>캐릭터가 장애물에 닿았을 때</p>
+                                        </div>
+                                        <div class="test-item">
+                                            <label>기대 결과:</label>
+                                            <p>게임이 종료되고 점수가 표시된다</p>
+                                        </div>
+                                    </div>
+                                    <div class="test-actions">
+                                        <button class="btn-small" onclick="runSingleTest(3)">▶ 실행</button>
+                                        <button class="btn-small success" onclick="markTestPass(3)">✓ 통과</button>
+                                        <button class="btn-small fail" onclick="markTestFail(3)">✗ 실패</button>
+                                    </div>
+                                </div>
+
+                                <!-- 실패 디버그 -->
+                                <div class="debug-section" id="debugSection" style="display: none;">
+                                    <h4>🔍 실패한 테스트가 있나요?</h4>
+                                    <p>실패 원인을 선택하면 튜터가 도와드려요</p>
+                                    <div class="debug-options">
+                                        <button class="btn-secondary" onclick="askTutor('collision')">충돌 감지 문제</button>
+                                        <button class="btn-secondary" onclick="askTutor('movement')">움직임 문제</button>
+                                        <button class="btn-secondary" onclick="askTutor('spawn')">생성 문제</button>
+                                        <button class="btn-secondary" onclick="askTutor('other')">기타</button>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- 튜터 탭 -->
+                        <div class="tab-pane" id="tutor-pane">
+                            <div class="tutor-section">
+                                <div class="section-header">
+                                    <h3>💬 AI 튜터</h3>
+                                    <span class="tutor-status">대기중</span>
+                                </div>
+
+                                <div class="tutor-welcome">
+                                    <p>막히는 부분이 있나요?</p>
+                                    <p>튜터가 <strong>질문 → 힌트 → 부분 예시</strong> 순서로 도와드려요!</p>
+                                </div>
+
+                                <div class="tutor-help-level">
+                                    <h4>도움 레벨 선택</h4>
+                                    <div class="level-buttons">
+                                        <button class="level-btn" onclick="selectLevel(1)">
+                                            <strong>Level 1</strong>
+                                            <span>질문으로 생각 유도</span>
+                                        </button>
+                                        <button class="level-btn" onclick="selectLevel(2)">
+                                            <strong>Level 2</strong>
+                                            <span>힌트와 확인 방법</span>
+                                        </button>
+                                        <button class="level-btn" onclick="selectLevel(3)">
+                                            <strong>Level 3</strong>
+                                            <span>부분 예시 (최대 2줄)</span>
+                                        </button>
+                                    </div>
+                                </div>
+
+                                <div class="tutor-response" id="tutorResponse" style="display: none;">
+                                    <div class="response-card">
+                                        <h4>튜터의 답변</h4>
+                                        <div class="response-content">
+                                            <div class="response-item">
+                                                <strong>💡 질문:</strong>
+                                                <p id="tutorQuestion">-</p>
+                                            </div>
+                                            <div class="response-item">
+                                                <strong>🔍 힌트:</strong>
+                                                <p id="tutorHint">-</p>
+                                            </div>
+                                            <div class="response-item">
+                                                <strong>📝 예시:</strong>
+                                                <pre id="tutorExample">-</pre>
+                                            </div>
+                                            <div class="response-item">
+                                                <strong>🎯 다음 행동:</strong>
+                                                <p id="tutorNextAction">-</p>
+                                            </div>
+                                        </div>
+                                        <div class="response-actions">
+                                            <button class="btn-primary" onclick="switchTab('test')">테스트로 돌아가기</button>
+                                            <button class="btn-secondary" onclick="applyHint()">힌트 적용하기</button>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- 도움말 탭 -->
+                        <div class="tab-pane" id="help-pane">
+                            <div class="help-section">
+                                <div class="section-header">
+                                    <h3>📚 도움말</h3>
+                                </div>
+
+                                <div class="help-video">
+                                    <h4>📹 미션 소개 영상 (10~15초)</h4>
+                                    <div class="video-wrapper">
+                                        <div class="video-placeholder small">
+                                            <div class="play-icon">▶</div>
+                                            <p>장애물 피하기 게임 만들기</p>
+                                        </div>
+                                    </div>
+                                    <button class="btn-secondary" onclick="openVideoFullscreen()">🔍 크게 보기</button>
+                                </div>
+
+                                <div class="help-tutorial">
+                                    <h4>📖 튜토리얼 영상 (40~60초)</h4>
+                                    <div class="video-wrapper">
+                                        <div class="video-placeholder small">
+                                            <div class="play-icon">▶</div>
+                                            <p>자세한 설명 보기</p>
+                                        </div>
+                                    </div>
+                                    <button class="btn-secondary" onclick="openTutorialFullscreen()">🔍 크게 보기</button>
+                                </div>
+
+                                <div class="help-tips">
+                                    <h4>💡 핵심 팁</h4>
+                                    <ul>
+                                        <li>테스트 3개를 모두 통과하면 제출할 수 있어요</li>
+                                        <li>막히면 튜터에게 물어보세요</li>
+                                        <li>천천히 해도 괜찮아요. 45분 안에 완성하는 게 목표예요</li>
+                                    </ul>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- 하단: 코드 편집 영역 (토글 가능) -->
+        <div class="code-editor-section">
+            <div class="code-section-header">
+                <div class="code-header-left">
+                    <button class="btn-toggle" id="codeToggleBtn" onclick="toggleCodeSection()">
+                        <span id="toggleIcon">▼</span> 코드 보기
+                    </button>
+                    <span class="code-file-name" id="currentFileName">main.js</span>
+                </div>
+                <div class="code-header-right">
+                    <button class="btn-small" onclick="runCode()">▶ 코드 실행</button>
+                    <button class="btn-small" onclick="saveCode()">💾 저장</button>
+                    <button class="btn-small" onclick="resetCode()">↺ 초기화</button>
+                </div>
+            </div>
+
+            <div class="code-section-content" id="codeContent" style="display: none;">
+                <div class="code-grid">
+                    <!-- 파일 트리 (20%) -->
+                    <div class="code-files">
+                        <div class="files-header">
+                            <h4>📁 파일</h4>
+                            <button class="btn-icon-small" onclick="createNewFile()" title="새 파일">+</button>
+                        </div>
+                        <div class="files-list">
+                            <div class="file-item active" onclick="openFile('main.js')">
+                                <span class="file-icon">📄</span>
+                                <span class="file-name">main.js</span>
+                            </div>
+                            <div class="file-item" onclick="openFile('game.js')">
+                                <span class="file-icon">📄</span>
+                                <span class="file-name">game.js</span>
+                            </div>
+                            <div class="file-item" onclick="openFile('style.css')">
+                                <span class="file-icon">🎨</span>
+                                <span class="file-name">style.css</span>
+                            </div>
+                        </div>
+                        <div class="files-tip">
+                            <small>💡 초보자는 main.js만 수정해도 OK!</small>
+                        </div>
+                    </div>
+
+                    <!-- 코드 에디터 (60%) -->
+                    <div class="code-editor">
+                        <div class="editor-header">
+                            <div class="editor-tabs">
+                                <span class="editor-tab active">main.js</span>
+                            </div>
+                            <div class="editor-mode">
+                                <label>
+                                    <input type="checkbox" id="editModeToggle" onchange="toggleEditMode()">
+                                    <span>직접 수정 (고급)</span>
+                                </label>
+                            </div>
+                        </div>
+                        <textarea 
+                            id="codeEditor" 
+                            class="code-textarea" 
+                            readonly
+                            spellcheck="false"
+                            placeholder="여기에 코드가 표시됩니다...
+
+// 기본 코드 예시:
+const game = {
+    player: { x: 100, y: 100 },
+    obstacles: [],
+    score: 0
+};
+
+// 키보드 입력 처리
+document.addEventListener('keydown', (e) => {
+    if (e.key === 'ArrowLeft') {
+        game.player.x -= 10;
+    }
+    if (e.key === 'ArrowRight') {
+        game.player.x += 10;
+    }
+});
+
+// 게임 루프
+function gameLoop() {
+    // 여기에 게임 로직 작성
+}
+"></textarea>
+                        <div class="editor-footer">
+                            <span class="editor-status">줄: 1, 열: 1</span>
+                            <span class="editor-lang">JavaScript</span>
+                        </div>
+                    </div>
+
+                    <!-- 콘솔/로그 (20%) -->
+                    <div class="code-console">
+                        <div class="console-header">
+                            <h4>📋 콘솔</h4>
+                            <button class="btn-icon-small" onclick="clearConsole()" title="지우기">🗑</button>
+                        </div>
+                        <div class="console-output" id="consoleOutput">
+                            <div class="console-line info">
+                                <span class="console-time">00:00</span>
+                                <span class="console-text">콘솔 준비됨</span>
+                            </div>
+                        </div>
+                        <div class="console-tip">
+                            <small>💡 console.log()로 디버깅하세요</small>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="workspace.js"></script>
+</body>
+</html>

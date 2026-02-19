@@ -1,0 +1,96 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>마이페이지 - akeo</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <div class="container">
+        <!-- 헤더 -->
+        <header class="header">
+            <div class="logo">
+                <div class="logo-icon">A</div>
+                <h1>akeo</h1>
+            </div>
+            <div class="user-info">
+                <button class="btn-secondary" onclick="location.href='index.html'">🏠 홈으로</button>
+            </div>
+        </header>
+
+        <!-- 메인 콘텐츠 -->
+        <main class="mypage-main">
+            <div class="mypage-container">
+                <!-- 사용자 프로필 -->
+                <div class="profile-section">
+                    <div class="profile-header">
+                        <div class="profile-avatar">
+                            <span>👤</span>
+                        </div>
+                        <div class="profile-info">
+                            <h2>학생님의 포트폴리오</h2>
+                            <p>완성한 작품: <strong id="portfolioCount">0</strong>개</p>
+                        </div>
+                    </div>
+                    <div class="profile-stats">
+                        <div class="stat-item">
+                            <div class="stat-value" id="totalMissions">0</div>
+                            <div class="stat-label">완료한 미션</div>
+                        </div>
+                        <div class="stat-item">
+                            <div class="stat-value" id="totalTests">0</div>
+                            <div class="stat-label">통과한 테스트</div>
+                        </div>
+                        <div class="stat-item">
+                            <div class="stat-value" id="totalScore">0</div>
+                            <div class="stat-label">누적 점수</div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- 포트폴리오 리스트 -->
+                <div class="portfolio-section">
+                    <div class="section-header">
+                        <h3>🏆 내 작품 모음</h3>
+                        <button class="btn-primary" onclick="location.href='index.html'">
+                            ➕ 새 미션 시작
+                        </button>
+                    </div>
+
+                    <div class="portfolio-grid" id="portfolioGrid">
+                        <!-- 포트폴리오 카드가 동적으로 추가됨 -->
+                        <div class="portfolio-card empty">
+                            <div class="empty-state">
+                                <div class="empty-icon">📦</div>
+                                <p>아직 완성한 작품이 없어요</p>
+                                <small>첫 미션을 시작해보세요!</small>
+                                <button class="btn-primary" onclick="location.href='index.html'">
+                                    미션 시작하기
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- 학습 활동 로그 (선택) -->
+                <div class="activity-section">
+                    <h3>📊 최근 활동</h3>
+                    <div class="activity-list" id="activityList">
+                        <div class="activity-item empty">
+                            <p>활동 기록이 없습니다</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </main>
+
+        <!-- 푸터 -->
+        <footer class="footer">
+            <p>&copy; 2024 akeo. 딸깍→통제→검증→자기화→포트폴리오</p>
+        </footer>
+    </div>
+
+    <script src="mypage.js"></script>
+</body>
+</html>

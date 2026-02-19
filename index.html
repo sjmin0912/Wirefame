@@ -1,0 +1,111 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>akeo - 오늘의 미션</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <div class="container">
+        <!-- 헤더 -->
+        <header class="header">
+            <div class="logo">
+                <div class="logo-icon">A</div>
+                <h1>akeo</h1>
+            </div>
+            <div class="user-info">
+                <span>안녕하세요, 학생님!</span>
+                <button class="btn-secondary" onclick="location.href='mypage.html'">마이페이지</button>
+            </div>
+        </header>
+
+        <!-- 메인 콘텐츠 -->
+        <main class="home-main">
+            <div class="mission-container">
+                <!-- 미션 헤더 -->
+                <div class="mission-header">
+                    <span class="mission-badge">오늘의 미션</span>
+                    <h2>장애물 피하기 게임 만들기</h2>
+                    <p class="mission-goal">키보드로 캐릭터를 움직여서 떨어지는 장애물을 피하는 게임을 만들어요!</p>
+                </div>
+
+                <!-- 동영상 영역 -->
+                <div class="video-section">
+                    <div class="video-wrapper">
+                        <!-- 실제 구현시 여기에 동영상 임베드 -->
+                        <div class="video-placeholder">
+                            <div class="play-icon">▶</div>
+                            <p>미션 소개 영상 (10~15초)</p>
+                            <small>클릭하면 재생됩니다</small>
+                        </div>
+                    </div>
+                    <div class="video-info">
+                        <div class="info-item">
+                            <strong>⏱ 예상 시간</strong>
+                            <span>45분 (완성 기준)</span>
+                        </div>
+                        <div class="info-item">
+                            <strong>🎯 학습 목표</strong>
+                            <span>키보드 입력, 충돌 감지, 점수 시스템</span>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- 미션 브리핑 -->
+                <div class="mission-briefing">
+                    <h3>🎮 무엇을 만드나요?</h3>
+                    <div class="briefing-cards">
+                        <div class="briefing-card">
+                            <div class="card-icon">📦</div>
+                            <h4>산출물</h4>
+                            <p>장애물 피하기 게임</p>
+                        </div>
+                        <div class="briefing-card">
+                            <div class="card-icon">✅</div>
+                            <h4>성공 조건</h4>
+                            <ul>
+                                <li>캐릭터가 좌우로 움직인다</li>
+                                <li>장애물이 위에서 떨어진다</li>
+                                <li>충돌하면 게임이 끝난다</li>
+                            </ul>
+                        </div>
+                        <div class="briefing-card">
+                            <div class="card-icon">💾</div>
+                            <h4>완성하면?</h4>
+                            <p>내 포트폴리오에 저장되고<br>친구들과 공유할 수 있어요</p>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- CTA 버튼 -->
+                <div class="cta-section">
+                    <button class="btn-primary large" onclick="location.href='workspace.html'">
+                        🚀 바로 만들기
+                    </button>
+                    <button class="btn-secondary large" onclick="alert('샘플 플레이 기능은 준비중입니다')">
+                        👀 샘플 먼저 보기
+                    </button>
+                </div>
+
+                <!-- 최근 포트폴리오 미리보기 -->
+                <div class="recent-portfolio">
+                    <h3>🏆 최근 완성한 작품</h3>
+                    <div class="portfolio-preview">
+                        <div class="portfolio-card empty">
+                            <p>아직 완성한 작품이 없어요<br>첫 작품을 만들어보세요!</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </main>
+
+        <!-- 푸터 -->
+        <footer class="footer">
+            <p>&copy; 2024 akeo. 딸깍→통제→검증→자기화→포트폴리오</p>
+        </footer>
+    </div>
+
+    <script src="home.js"></script>
+</body>
+</html>
